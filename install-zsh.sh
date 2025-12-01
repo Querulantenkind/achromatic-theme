@@ -87,50 +87,119 @@ if [[ "$SHELL" != *"zsh"* ]]; then
 fi
 
 # Check for recommended tools
-RECOMMENDED_TOOLS=("zoxide" "fzf" "eza" "fd" "bat" "rg")
+# Map command names to package names (some differ)
+declare -A TOOL_PACKAGES
+TOOL_PACKAGES[zoxide]="zoxide"
+TOOL_PACKAGES[fzf]="fzf"
+TOOL_PACKAGES[eza]="eza"
+TOOL_PACKAGES[fd]="fd"
+TOOL_PACKAGES[bat]="bat"
+TOOL_PACKAGES[rg]="ripgrep"
+TOOL_PACKAGES[yazi]="yazi"
+
+RECOMMENDED_TOOLS=("zoxide" "fzf" "eza" "fd" "bat" "rg" "yazi")
 MISSING_TOOLS=()
+MISSING_PACKAGES=()
 
 for tool in "${RECOMMENDED_TOOLS[@]}"; do
     if ! command -v "$tool" &> /dev/null; then
         MISSING_TOOLS+=("$tool")
+        MISSING_PACKAGES+=("${TOOL_PACKAGES[$tool]}")
     else
         print_success "Found: $tool"
     fi
 done
 
 if [ ${#MISSING_TOOLS[@]} -ne 0 ]; then
-    print_warning "Recommended tools not found: ${MISSING_TOOLS[*]}"
-    print_info "Install with: sudo pacman -S ${MISSING_TOOLS[*]}"
+    print_warning "Missing tools: ${MISSING_TOOLS[*]}"
     echo ""
-    read -p "Continue anyway? (Y/n): " -n 1 -r
+    read -p "Install missing tools now? (Y/n): " -n 1 -r
     echo
-    if [[ $REPLY =~ ^[Nn]$ ]]; then
-        exit 1
+    if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+        print_info "Installing: ${MISSING_PACKAGES[*]}"
+        sudo pacman -S --needed "${MISSING_PACKAGES[@]}"
+        print_success "Tools installed"
+    else
+        print_info "Skipping tool installation"
+        print_info "Install later with: sudo pacman -S ${MISSING_PACKAGES[*]}"
     fi
 fi
 
 # Check for optional ZSH plugins
 print_section "Checking ZSH Plugins"
 
+# Map plugin paths to package names
+declare -A PLUGIN_PACKAGES
+PLUGIN_PACKAGES["/usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"]="zsh-autosuggestions"
+PLUGIN_PACKAGES["/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"]="zsh-syntax-highlighting"
+PLUGIN_PACKAGES["/usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh"]="zsh-history-substring-search"
+
 PLUGIN_PATHS=(
     "/usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
     "/usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
     "/usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh"
-    "/usr/share/zsh/plugins/fzf-tab/fzf-tab.plugin.zsh"
 )
+
+MISSING_PLUGINS=()
 
 for plugin_path in "${PLUGIN_PATHS[@]}"; do
     plugin_name=$(basename "$(dirname "$plugin_path")")
     if [[ -f "$plugin_path" ]]; then
         print_success "Found plugin: $plugin_name"
     else
-        print_info "Optional plugin not found: $plugin_name"
+        print_info "Missing plugin: $plugin_name"
+        MISSING_PLUGINS+=("${PLUGIN_PACKAGES[$plugin_path]}")
     fi
 done
 
-echo ""
-print_info "Install plugins with: sudo pacman -S zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search"
-print_info "For fzf-tab, use AUR: yay -S fzf-tab-git"
+# Check fzf-tab separately (AUR package)
+FZF_TAB_MISSING=0
+if [[ -f "/usr/share/zsh/plugins/fzf-tab/fzf-tab.plugin.zsh" ]]; then
+    print_success "Found plugin: fzf-tab"
+else
+    print_info "Missing plugin: fzf-tab (AUR)"
+    FZF_TAB_MISSING=1
+fi
+
+# Install missing plugins from official repos
+if [ ${#MISSING_PLUGINS[@]} -ne 0 ]; then
+    echo ""
+    read -p "Install missing ZSH plugins now? (Y/n): " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+        print_info "Installing: ${MISSING_PLUGINS[*]}"
+        sudo pacman -S --needed "${MISSING_PLUGINS[@]}"
+        print_success "Plugins installed"
+    else
+        print_info "Skipping plugin installation"
+        print_info "Install later with: sudo pacman -S ${MISSING_PLUGINS[*]}"
+    fi
+fi
+
+# Offer to install fzf-tab from AUR
+if [ $FZF_TAB_MISSING -eq 1 ]; then
+    # Check for AUR helpers
+    AUR_HELPER=""
+    if command -v yay &> /dev/null; then
+        AUR_HELPER="yay"
+    elif command -v paru &> /dev/null; then
+        AUR_HELPER="paru"
+    fi
+    
+    if [[ -n "$AUR_HELPER" ]]; then
+        echo ""
+        read -p "Install fzf-tab from AUR using $AUR_HELPER? (Y/n): " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Nn]$ ]]; then
+            print_info "Installing fzf-tab-git..."
+            $AUR_HELPER -S --needed fzf-tab-git
+            print_success "fzf-tab installed"
+        fi
+    else
+        print_info "No AUR helper found (yay/paru). Install fzf-tab manually:"
+        print_info "  yay -S fzf-tab-git  or  paru -S fzf-tab-git"
+    fi
+fi
 
 # === BACKUP EXISTING CONFIGURATIONS ===
 
@@ -250,15 +319,19 @@ echo "  ~/.zshrc                    Main configuration"
 echo "  ~/.config/achromatic-zsh/   Module files"
 echo ""
 
-echo "Recommended packages to install:"
+echo "Key bindings:"
+echo "  Ctrl+T    Fuzzy file search"
+echo "  Ctrl+R    Fuzzy history search"
+echo "  Alt+C     Fuzzy cd into directory"
+echo "  Tab       Smart completion (fzf-tab if installed)"
 echo ""
-echo "  Core navigation tools:"
-echo "    sudo pacman -S zoxide fzf eza fd bat ripgrep yazi"
-echo ""
-echo "  ZSH plugins:"
-echo "    sudo pacman -S zsh-autosuggestions zsh-syntax-highlighting"
-echo "    sudo pacman -S zsh-history-substring-search"
-echo "    yay -S fzf-tab-git  (AUR)"
+
+echo "Navigation commands:"
+echo "  cd <partial>   Smart jump with zoxide"
+echo "  y              Yazi file manager (cd on exit)"
+echo "  fcd            Fuzzy cd into any subdirectory"
+echo "  fe             Fuzzy open file in editor"
+echo "  l / ll / lt    Enhanced ls with eza"
 echo ""
 
 print_info "To restore your previous configuration:"
