@@ -93,7 +93,7 @@ bindsym $mod+Shift+f floating toggle
 bindsym $mod+Return exec kitty
 
 # Application launcher (Rofi)
-bindsym $mod+space exec rofi -show drun
+bindsym $mod+space exec rofi -show drun -show-icons
 
 # Text editor
 bindsym $mod+e exec kitty micro
@@ -174,17 +174,17 @@ bindsym $mod+Ctrl+Right resize grow width 20 px or 2 ppt
 # Split orientation
 bindsym $mod+v split toggle
 
-# Layout modes
-bindsym $mod+s layout stacking
+# Layout modes (remapped to avoid conflict with scratchpad)
+bindsym $mod+Shift+t layout stacking
 bindsym $mod+w layout tabbed
 bindsym $mod+t layout toggle split
-
-# Toggle tiling/floating focus
-bindsym $mod+Tab focus mode_toggle
 
 # Focus parent/child
 bindsym $mod+a focus parent
 bindsym $mod+d focus child
+
+# Toggle tiling/floating focus
+bindsym $mod+g focus mode_toggle
 
 # ----------------------------------------------------------------------------
 # WORKSPACES
@@ -233,12 +233,16 @@ bindsym $mod+Ctrl+Shift+7 move container to workspace number $ws7; workspace num
 bindsym $mod+Ctrl+Shift+8 move container to workspace number $ws8; workspace number $ws8
 bindsym $mod+Ctrl+Shift+9 move container to workspace number $ws9; workspace number $ws9
 
+# Workspace navigation (OmarchyOS style)
+bindsym $mod+Tab workspace next
+bindsym $mod+Shift+Tab workspace prev
+
 # ----------------------------------------------------------------------------
-# SCRATCHPAD
+# SCRATCHPAD (OmarchyOS style)
 # ----------------------------------------------------------------------------
 
+bindsym $mod+s scratchpad show
 bindsym $mod+Shift+s move scratchpad
-bindsym $mod+minus scratchpad show
 
 # ----------------------------------------------------------------------------
 # MOUSE BINDINGS
