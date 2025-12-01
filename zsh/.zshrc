@@ -37,7 +37,7 @@ bindkey '^[[1;5D' backward-word     # Ctrl+Left
 # zsh-autosuggestions
 if [[ -f /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
     source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-    ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#666666'
+    ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=#d4a017'
     ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 fi
 
@@ -48,10 +48,10 @@ if [[ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.
     ZSH_HIGHLIGHT_STYLES[default]='fg=#cccccc'
     ZSH_HIGHLIGHT_STYLES[unknown-token]='fg=#666666,underline'
     ZSH_HIGHLIGHT_STYLES[reserved-word]='fg=#ffffff,bold'
-    ZSH_HIGHLIGHT_STYLES[alias]='fg=#e0e0e0'
+    ZSH_HIGHLIGHT_STYLES[alias]='fg=#d4a017'
     ZSH_HIGHLIGHT_STYLES[builtin]='fg=#e0e0e0'
     ZSH_HIGHLIGHT_STYLES[function]='fg=#e0e0e0'
-    ZSH_HIGHLIGHT_STYLES[command]='fg=#ffffff'
+    ZSH_HIGHLIGHT_STYLES[command]='fg=#f6d600'
     ZSH_HIGHLIGHT_STYLES[precommand]='fg=#ffffff,bold'
     ZSH_HIGHLIGHT_STYLES[commandseparator]='fg=#888888'
     ZSH_HIGHLIGHT_STYLES[path]='fg=#cccccc,underline'
@@ -73,7 +73,7 @@ if [[ -f /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substri
     source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
     bindkey '^[[A' history-substring-search-up
     bindkey '^[[B' history-substring-search-down
-    HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='fg=#ffffff,bold'
+    HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND='fg=#f6d600,bold'
     HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='fg=#666666'
 fi
 
