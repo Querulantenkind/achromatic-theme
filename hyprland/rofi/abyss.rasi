@@ -1,0 +1,165 @@
+/* ============================================================================
+   ABYSS ROFI THEME
+   Pure Monochrome Application Launcher
+   ============================================================================ */
+
+/* === GLOBALE KONFIGURATION === */
+
+configuration {
+    show-icons: false;
+    terminal: "kitty";
+    display-drun: "RUN";
+    width: 40;
+    lines: 10;
+}
+
+/* === FARB-DEFINITIONEN === */
+
+* {
+    background: #0a0a0a;
+    background-alt: #111111;
+    foreground: #e0e0e0;
+    selected: #2a2a2a;
+    active: #1a1a1a;
+    urgent: #3a3a3a;
+    border: #2a2a2a;
+    transparent: rgba(0, 0, 0, 0);
+    text-color: @foreground;
+    background-color: @transparent;
+}
+
+/* === HAUPTFENSTER === */
+
+window {
+    background-color: @background;
+    border: 2px solid;
+    border-color: @border;
+    border-radius: 0;
+    padding: 0;
+    location: center;
+    anchor: center;
+}
+
+/* === MAIN BOX === */
+
+mainbox {
+    background-color: @transparent;
+    children: [ inputbar, listview ];
+    spacing: 0;
+    padding: 0;
+}
+
+/* === EINGABE-LEISTE === */
+
+inputbar {
+    background-color: @background-alt;
+    text-color: @foreground;
+    padding: 10px;
+    border: 0 0 2px 0;
+    border-color: @border;
+    children: [ prompt, entry ];
+    spacing: 10px;
+}
+
+prompt {
+    background-color: @transparent;
+    text-color: @foreground;
+    font: "monospace bold 13";
+}
+
+entry {
+    background-color: @transparent;
+    text-color: @foreground;
+    placeholder: "Suche...";
+    placeholder-color: #666666;
+    cursor: text;
+}
+
+/* === LISTE === */
+
+listview {
+    background-color: @transparent;
+    padding: 10px;
+    spacing: 2px;
+    scrollbar: false;
+    fixed-height: true;
+    fixed-columns: true;
+    dynamic: false;
+}
+
+/* === EINTRÄGE === */
+
+element {
+    background-color: @transparent;
+    text-color: @foreground;
+    padding: 8px;
+    border: 0;
+    border-radius: 0;
+}
+
+element normal.normal {
+    background-color: @transparent;
+    text-color: @foreground;
+}
+
+element alternate.normal {
+    background-color: @background-alt;
+    text-color: @foreground;
+}
+
+element selected.normal {
+    background-color: @selected;
+    text-color: #ffffff;
+    font: "monospace bold 13";
+}
+
+element selected.alternate {
+    background-color: @selected;
+    text-color: #ffffff;
+    font: "monospace bold 13";
+}
+
+element active.normal {
+    background-color: @active;
+    text-color: @foreground;
+}
+
+element urgent.normal {
+    background-color: @urgent;
+    text-color: #ffffff;
+}
+
+/* === TEXT === */
+
+element-text {
+    background-color: inherit;
+    text-color: inherit;
+    vertical-align: 0.5;
+}
+
+element-icon {
+    background-color: transparent;
+    size: 0;
+}
+
+/* === SCROLLBAR === */
+
+scrollbar {
+    handle-width: 0;
+    handle-color: @transparent;
+    background-color: @transparent;
+}
+
+/* === MESSAGE BOX === */
+
+message {
+    background-color: @background-alt;
+    border: 2px solid;
+    border-color: @border;
+    padding: 10px;
+}
+
+textbox {
+    background-color: @transparent;
+    text-color: @foreground;
+}

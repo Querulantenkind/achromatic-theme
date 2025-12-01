@@ -1,0 +1,159 @@
+/* ============================================================================
+   ABYSS WAYBAR THEME
+   Monochrome mit Hover-Effekten und Tray
+   ============================================================================ */
+
+/* === BASIS FÜR ALLE ELEMENTE === */
+
+* {
+    font-family: monospace;
+    font-size: 13px;
+    border: none;
+    border-radius: 0;
+    min-height: 0;
+}
+
+/* === HAUPTFENSTER === */
+
+window#waybar {
+    background-color: #0a0a0a;
+    color: #e0e0e0;
+    transition-property: background-color;
+    transition-duration: 0.2s;
+}
+
+/* === MODULE LINKS (CPU, RAM) === */
+
+#cpu,
+#memory {
+    padding: 0 10px;
+    background-color: #111111;
+    color: #cccccc;
+    margin-right: 4px;
+    transition: all 0.2s ease-in-out;
+}
+
+#cpu {
+    border-left: 2px solid #2a2a2a;
+}
+
+#cpu:hover {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+#memory:hover {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+/* === UHR IN DER MITTE === */
+
+#clock {
+    padding: 0 15px;
+    background-color: #1a1a1a;
+    color: #ffffff;
+    font-weight: bold;
+    transition: all 0.2s ease-in-out;
+}
+
+#clock:hover {
+    background-color: #2a2a2a;
+    color: #ffffff;
+}
+
+/* === MODULE RECHTS (NETZWERK, BATTERIE, AUDIO) === */
+
+#network,
+#battery,
+#pulseaudio {
+    padding: 0 10px;
+    background-color: #111111;
+    color: #cccccc;
+    margin-left: 4px;
+    transition: all 0.2s ease-in-out;
+}
+
+#network {
+    border-left: 2px solid #2a2a2a;
+}
+
+#battery {
+    border-left: 2px solid #2a2a2a;
+}
+
+#pulseaudio {
+    border-left: 2px solid #2a2a2a;
+}
+
+#network:hover {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+#battery:hover {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+#pulseaudio:hover {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+/* === BATTERIE-ZUSTÄNDE === */
+
+#battery.charging {
+    background-color: #1a1a1a;
+    color: #ffffff;
+}
+
+#battery.warning {
+    background-color: #2a2a2a;
+    color: #ffffff;
+}
+
+#battery.critical {
+    background-color: #3a3a3a;
+    color: #ffffff;
+    animation: blink 1s linear infinite;
+}
+
+@keyframes blink {
+    50% {
+        background-color: #1a1a1a;
+    }
+}
+
+/* === NETZWERK-ZUSTÄNDE === */
+
+#network.disconnected {
+    color: #666666;
+}
+
+/* === AUDIO-ZUSTÄNDE === */
+
+#pulseaudio.muted {
+    color: #666666;
+}
+
+/* === TRAY === */
+
+#tray {
+    background-color: #111111;
+    border-left: 2px solid #2a2a2a;
+    padding: 0 5px;
+    transition: all 0.2s ease-in-out;
+}
+
+#tray:hover {
+    background-color: #1a1a1a;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+}

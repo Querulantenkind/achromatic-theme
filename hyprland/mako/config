@@ -1,0 +1,80 @@
+# ============================================================================
+# ABYSS MAKO THEME
+# Pure Monochrome Notifications
+# ============================================================================
+
+# === POSITION UND GRÖSSE ===
+
+anchor=top-right
+margin=10
+width=400
+height=150
+
+# === FARBEN UND RAHMEN (STANDARD) ===
+
+background-color=#0a0a0a
+text-color=#e0e0e0
+border-color=#2a2a2a
+border-size=2
+border-radius=0
+
+# === TEXTFORMATIERUNG ===
+
+font=monospace 12
+text-alignment=left
+padding=15
+markup=1
+
+# === VERHALTEN ===
+
+default-timeout=5000
+ignore-timeout=0
+max-visible=3
+sort=-time
+
+# === LAYER-KONFIGURATION ===
+
+layer=overlay
+
+# === AKTIONEN ===
+
+on-button-left=dismiss
+on-button-right=dismiss-all
+
+# === GRUPPIERUNG ===
+
+group-by=app-name
+format=<b>%s</b>\n%b
+
+# === ICONS ===
+
+icons=0
+
+# === DRINGLICHKEITSSTUFEN ===
+
+[urgency=low]
+background-color=#0a0a0a
+text-color=#666666
+border-color=#1a1a1a
+default-timeout=3000
+
+[urgency=normal]
+background-color=#0a0a0a
+text-color=#e0e0e0
+border-color=#2a2a2a
+default-timeout=5000
+
+[urgency=critical]
+background-color=#2a2a2a
+text-color=#ffffff
+border-color=#3a3a3a
+default-timeout=0
+ignore-timeout=1
+
+# === APP-SPEZIFISCHE REGELN ===
+
+[app-name="Power Manager"]
+urgency=critical
+
+[app-name="System Update"]
+urgency=normal
