@@ -51,14 +51,17 @@ fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PLASMA_SOURCE="$SCRIPT_DIR/plasma"
+SDDM_SOURCE="$SCRIPT_DIR/sddm"
 BACKUP_DIR="$HOME/.config/backup-achromatic-plasma-$(date +%Y%m%d-%H%M%S)"
 
 THEME_ID="org.achromatic.desktop"
 COLOR_SCHEME="Achromatic"
+SDDM_THEME_NAME="achromatic"
 
 # Destination directories
 DEST_LOOKANDFEEL="$HOME/.local/share/plasma/look-and-feel"
 DEST_COLORS="$HOME/.local/share/color-schemes"
+DEST_SDDM="/usr/share/sddm/themes"
 
 # === BANNER ===
 
@@ -323,29 +326,70 @@ echo ""
 print_success "All Plasma configurations have been installed"
 print_info "Backup location: $BACKUP_DIR"
 
-echo ""
-echo "Installed components:"
-echo "  - Color Scheme: $COLOR_SCHEME"
-echo "  - Global Theme: $THEME_ID"
-echo "  - GTK-3/GTK-4 dark theme configuration"
-echo "  - Environment variables for portal integration"
-echo ""
 
-echo "Next steps:"
-echo ""
-echo "  1. Log out and log back in for full effect"
-echo "     OR"
-echo "  2. Restart Plasma Shell: kquitapp6 plasmashell && plasmashell &"
-echo ""
-echo "Manual configuration (if needed):"
-echo "  - System Settings > Appearance > Colors > Achromatic"
-echo "  - System Settings > Appearance > Global Theme > Achromatic"
-echo ""
+# === SDDM THEME INSTALLATION ===
 
-print_info "To restore your previous configuration:"
-echo "  cp -r $BACKUP_DIR/* ~/.local/share/"
-echo "  cp $BACKUP_DIR/kdeglobals ~/.config/ (if backed up)"
-echo ""
+print_section "SDDM Theme Installation"
+
+SDDM_INSTALLED=0
+
+if [ -d "$SDDM_SOURCE/$SDDM_THEME_NAME" ]; then
+    echo ""
+    echo "An SDDM login theme is available for installation."
+    echo "This requires sudo/root access to install to $DEST_SDDM"
+    echo ""
+    read -p "Install SDDM theme? (y/N): " -n 1 -r
+    echo
+    
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        print_info "Installing SDDM theme (requires sudo)..."
+        
+        if sudo -v 2>/dev/null; then
+            # Remove existing theme if present
+            sudo rm -rf "$DEST_SDDM/$SDDM_THEME_NAME" 2>/dev/null || true
+            
+            # Copy theme files
+            sudo cp -r "$SDDM_SOURCE/$SDDM_THEME_NAME" "$DEST_SDDM/"
+            sudo chmod -R 755 "$DEST_SDDM/$SDDM_THEME_NAME"
+            
+            print_success "Installed SDDM theme to $DEST_SDDM/$SDDM_THEME_NAME"
+            SDDM_INSTALLED=1
+            
+            # Ask to configure SDDM
+            echo ""
+            read -p "Set Achromatic as the default SDDM theme? (y/N): " -n 1 -r
+            echo
+            
+            if [[ $REPLY =~ ^[Yy]$ ]]; then
+                # Create sddm.conf.d directory if needed
+                sudo mkdir -p /etc/sddm.conf.d
+                
+                # Create theme configuration
+                echo "[Theme]
+Current=$SDDM_THEME_NAME" | sudo tee /etc/sddm.conf.d/achromatic.conf > /dev/null
+                
+                print_success "Configured SDDM to use Achromatic theme"
+                print_info "The theme will be active on next login/reboot"
+            else
+                print_info "To manually set the theme:"
+                echo "  sudo nano /etc/sddm.conf.d/theme.conf"
+                echo "  Add: [Theme]"
+                echo "       Current=$SDDM_THEME_NAME"
+            fi
+        else
+            print_warning "Could not obtain sudo access"
+            print_info "To install manually:"
+            echo "  sudo cp -r $SDDM_SOURCE/$SDDM_THEME_NAME $DEST_SDDM/"
+            echo "  sudo chmod -R 755 $DEST_SDDM/$SDDM_THEME_NAME"
+        fi
+    else
+        print_info "Skipping SDDM theme installation"
+        print_info "To install later, run this script again or manually copy:"
+        echo "  sudo cp -r $SDDM_SOURCE/$SDDM_THEME_NAME $DEST_SDDM/"
+    fi
+else
+    print_info "SDDM theme source not found, skipping"
+fi
 
 # === OPTIONAL: RESTART PLASMA ===
 
@@ -362,7 +406,37 @@ if pgrep -x "plasmashell" > /dev/null; then
     fi
 fi
 
+# === FINAL SUMMARY ===
+
+print_section "Installation Summary"
+
 echo ""
+echo "========================================================================"
+echo "                                                                        "
+echo "            ACHROMATIC PLASMA INSTALLED SUCCESSFULLY                    "
+echo "                                                                        "
+echo "========================================================================"
+echo ""
+
+echo "Installed components:"
+echo "  - Color Scheme: $COLOR_SCHEME"
+echo "  - Global Theme: $THEME_ID"
+echo "  - GTK-3/GTK-4 dark theme configuration"
+echo "  - Environment variables for portal integration"
+if [ $SDDM_INSTALLED -eq 1 ]; then
+    echo "  - SDDM Login Theme: $SDDM_THEME_NAME"
+fi
+echo ""
+
+print_info "Backup location: $BACKUP_DIR"
+echo ""
+
+if [ $SDDM_INSTALLED -eq 1 ]; then
+    print_info "To test SDDM theme without logging out:"
+    echo "  sddm-greeter-qt6 --test-mode --theme $DEST_SDDM/$SDDM_THEME_NAME"
+    echo ""
+fi
+
 print_success "Plasma installation script completed"
 echo ""
 

@@ -1,0 +1,14 @@
+[General]
+# User-customizable settings for Achromatic SDDM Theme
+# Copy this file to theme.conf.user and modify as needed
+
+# Background: Use a solid color or path to an image
+# background=#0a0a0a
+# background=/path/to/your/wallpaper.jpg
+
+# Font settings
+# font=Noto Sans
+# fontSize=10
+# clockFont=monospace
+# clockFontSize=48
+

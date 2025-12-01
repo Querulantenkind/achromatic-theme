@@ -1,0 +1,9 @@
+[SddmGreeterTheme]
+Name=Achromatic
+Description=Pure Monochrome Login Theme
+Author=Achromatic Theme
+Website=https://github.com/achromatic-theme
+License=MIT
+Type=sddm-theme
+Version=1.0
+
