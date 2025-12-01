@@ -68,7 +68,8 @@ show_menu() {
     echo "  2) Install i3 configuration (X11)"
     echo "  3) Install KDE Plasma 6 theme"
     echo "  4) Install Hyprland + i3 (tiling WMs)"
-    echo "  5) Exit"
+    echo "  5) Install Fastfetch glitch animation"
+    echo "  6) Exit"
     echo ""
 }
 
@@ -124,12 +125,21 @@ install_tiling() {
     echo ""
 }
 
+install_fastfetch() {
+    if [ -f "$SCRIPT_DIR/install-fastfetch.sh" ]; then
+        bash "$SCRIPT_DIR/install-fastfetch.sh"
+    else
+        print_error "install-fastfetch.sh not found"
+        exit 1
+    fi
+}
+
 # === MAIN ===
 
 show_banner
 show_menu
 
-read -p "Enter your choice [1-5]: " choice
+read -p "Enter your choice [1-6]: " choice
 
 case $choice in
     1)
@@ -145,12 +155,15 @@ case $choice in
         install_tiling
         ;;
     5)
+        install_fastfetch
+        ;;
+    6)
         print_info "Installation cancelled"
         exit 0
         ;;
     *)
         print_error "Invalid option: $choice"
-        print_info "Please run the script again and select 1-5"
+        print_info "Please run the script again and select 1-6"
         exit 1
         ;;
 esac
