@@ -32,6 +32,17 @@ A complete X11 window manager setup with matching components:
 - **Notifications**: Dunst with three urgency levels
 - **Terminal**: Optimized for Kitty (compatible with any terminal)
 
+### ZSH Prompt
+
+A feature-rich ZSH configuration optimized for file navigation:
+
+- **Custom Prompt**: Two-line monochrome prompt with git integration
+- **Smart Navigation**: zoxide for intelligent directory jumping
+- **Fuzzy Finding**: fzf integration for files, history, and completions
+- **Modern Tools**: eza, fd, bat, ripgrep aliases
+- **Syntax Highlighting**: Yellow accents for commands and suggestions
+- **Fastfetch Greeting**: System info display on shell startup
+
 ## Screenshots
 
 *Screenshots will be added soon*
@@ -91,6 +102,38 @@ A complete X11 window manager setup with matching components:
 - **Minimal Design**: No icons, monospace typography
 - **Matching Colors**: Same palette as all other components
 
+### ZSH Prompt Features
+
+- **Two-Line Layout**: Clean separation between info and input
+- **Smart Path Shortening**: `~/Documents/projects/achromatic` becomes `~/D/p/achromatic`
+- **Git Integration**: Branch name with status symbols (`*` modified, `+` staged, `?` untracked, `>` ahead, `<` behind, `$` stash)
+- **Execution Time**: Shows duration for commands taking longer than 3 seconds
+- **Exit Code Indicator**: Visual feedback on command failure
+- **Context Indicators**: SSH, root, read-only directory, virtualenv, background jobs
+
+### ZSH Navigation Tools
+
+- **zoxide**: Smart `cd` that learns your most-used directories
+- **fzf**: Fuzzy finder for files, directories, and history
+- **eza**: Modern `ls` replacement with git integration
+- **fd**: Fast and user-friendly `find` alternative
+- **bat**: `cat` with syntax highlighting
+- **ripgrep**: Lightning-fast recursive search
+- **yazi**: Terminal file manager with directory sync
+
+### ZSH Plugins
+
+- **zsh-autosuggestions**: Fish-like command suggestions (gold color)
+- **zsh-syntax-highlighting**: Real-time syntax highlighting (yellow for commands)
+- **zsh-history-substring-search**: Fish-like history navigation
+- **fzf-tab**: Replace completion menu with fzf
+
+### Fastfetch Integration
+
+- **System Greeting**: Displays system info on every new shell
+- **Achromatic Theme**: Monochrome fastfetch configuration
+- **Glitch Animation**: Optional screensaver-style animation (`achromatic-glitch`)
+
 ## Color Palette
 ```
 #0a0a0a  - Deepest Black (backgrounds)
@@ -102,6 +145,10 @@ A complete X11 window manager setup with matching components:
 #cccccc  - Light Gray (standard text)
 #e0e0e0  - Very Light Gray (important text)
 #ffffff  - Pure White (maximum emphasis)
+
+Accent Colors (ZSH):
+#d4a017  - Muted Gold (autosuggestions, aliases)
+#f6d600  - Bright Yellow (valid commands, history matches)
 ```
 
 ## Requirements
@@ -129,9 +176,21 @@ sudo pacman -S i3-wm i3status rofi dunst kitty \
                scrot brightnessctl playerctl
 ```
 
+### Required Packages (ZSH)
+```bash
+# Core tools
+sudo pacman -S zsh zoxide fzf eza fd bat ripgrep yazi fastfetch
+
+# ZSH plugins
+sudo pacman -S zsh-autosuggestions zsh-syntax-highlighting zsh-history-substring-search
+
+# fzf-tab (from AUR)
+yay -S fzf-tab-git
+```
+
 ### Optional Packages
 ```bash
-sudo pacman -S yazi micro chromium
+sudo pacman -S micro chromium
 ```
 
 ## Installation
@@ -184,7 +243,10 @@ Run the master installer script which provides a menu to choose your configurati
 The installer will prompt you to select:
 1. **Hyprland** - Wayland compositor with Waybar, Rofi, and Mako
 2. **i3** - X11 window manager with i3status, Rofi, and Dunst
-3. **Both** - Install configurations for both environments
+3. **KDE Plasma** - Plasma 6 color scheme
+4. **Hyprland + i3** - Install both tiling WM configurations
+5. **Fastfetch** - Glitch animation and system fetch
+6. **ZSH** - Shell prompt with navigation tools
 
 You can also run the individual installers directly:
 
@@ -194,6 +256,9 @@ You can also run the individual installers directly:
 
 # Install only i3 configuration
 ./install-i3.sh
+
+# Install only ZSH configuration
+./install-zsh.sh
 ```
 
 The installer will:
@@ -261,6 +326,36 @@ The installer will:
 | `XF86MonBrightnessUp` | Brightness up |
 | `XF86MonBrightnessDown` | Brightness down |
 
+### ZSH Key Bindings
+
+| Key Combination | Action |
+|----------------|--------|
+| `Ctrl + T` | Fuzzy file search |
+| `Ctrl + R` | Fuzzy history search |
+| `Alt + C` | Fuzzy cd into directory |
+| `Tab` | Smart completion (fzf-tab) |
+| `Up/Down` | History substring search |
+| `Ctrl + Right/Left` | Move word forward/backward |
+
+### ZSH Commands & Aliases
+
+| Command | Action |
+|---------|--------|
+| `cd <partial>` | Smart jump with zoxide |
+| `y` | Open yazi file manager (cd on exit) |
+| `fcd` | Fuzzy cd into any subdirectory |
+| `fe` | Fuzzy open file in editor |
+| `fz` | Fuzzy zoxide directory selection |
+| `fgl` | Fuzzy git log browser |
+| `l` / `ll` / `la` | Enhanced ls with eza |
+| `lt` | Tree view (2 levels) |
+| `lS` / `lm` | Sort by size / modified time |
+| `..` / `...` / `....` | Go up 1/2/3 directories |
+| `take <dir>` | Create directory and cd into it |
+| `bd <name>` | Jump back to parent directory matching name |
+| `gs` / `gd` / `ga` | Git status / diff / add |
+| `reload` | Reload ZSH configuration |
+
 ## Project Structure
 ```
 achromatic/
@@ -285,12 +380,30 @@ achromatic/
 │   │   └── abyss.rasi
 │   └── dunst/
 │       └── dunstrc
+├── zsh/
+│   ├── .zshrc              # Main ZSH configuration
+│   ├── prompt.zsh          # Custom monochrome prompt
+│   ├── navigation.zsh      # zoxide, fzf, aliases
+│   ├── completion.zsh      # Completion system
+│   └── history.zsh         # History configuration
+├── fastfetch/
+│   ├── config.jsonc        # Fastfetch configuration
+│   ├── logo.txt            # ASCII logo
+│   └── achromatic-glitch.sh # Glitch animation script
+├── plasma/
+│   ├── achromatic/         # Plasma theme
+│   └── Achromatic.colors   # Color scheme
+├── sddm/
+│   └── achromatic/         # SDDM login theme
 ├── screenshots/
 │   ├── hyprland/
 │   └── i3/
-├── install.sh           # Master installer with menu
-├── install-hyprland.sh  # Hyprland-specific installer
-├── install-i3.sh        # i3-specific installer
+├── install.sh              # Master installer with menu
+├── install-hyprland.sh     # Hyprland-specific installer
+├── install-i3.sh           # i3-specific installer
+├── install-zsh.sh          # ZSH prompt installer
+├── install-plasma.sh       # Plasma theme installer
+├── install-fastfetch.sh    # Fastfetch installer
 └── README.md
 ```
 
@@ -364,14 +477,45 @@ notify-send "Test" "This is a test notification"
 cat /tmp/hypr/$(ls -t /tmp/hypr/ | head -n 1)/hyprland.log
 ```
 
+### ZSH not loading theme
+```bash
+# Verify files are installed
+ls ~/.config/achromatic-zsh/
+
+# Reload configuration
+source ~/.zshrc
+```
+
+### ZSH plugins not working
+```bash
+# Check if plugins are installed
+ls /usr/share/zsh/plugins/
+
+# Install missing plugins
+sudo pacman -S zsh-autosuggestions zsh-syntax-highlighting
+```
+
+### Fastfetch not showing
+```bash
+# Test fastfetch directly
+fastfetch
+
+# Check if installed
+which fastfetch
+```
+
 ## Roadmap
 
 - [x] Automated installation script
 - [x] i3 window manager support
-- [ ] KDE Plasma theme integration
+- [x] KDE Plasma theme integration
+- [x] ZSH prompt configuration
+- [x] Fastfetch integration
+- [x] SDDM login theme
 - [ ] Kitty terminal color scheme
 - [ ] Hyprlock screen locker theme
 - [ ] Hyprpaper wallpaper integration
+- [ ] GTK/Qt theme integration
 - [ ] CI/CD with GitHub Actions
 
 ## Contributing
