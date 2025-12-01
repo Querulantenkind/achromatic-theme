@@ -136,7 +136,32 @@ hyprctl reload
 
 ### Automated Installation
 
-*Installation script coming soon*
+Run the master installer script which provides a menu to choose your configuration:
+
+```bash
+./install.sh
+```
+
+The installer will prompt you to select:
+1. **Hyprland** - Wayland compositor with Waybar, Rofi, and Mako
+2. **i3** - X11 window manager with i3status, Rofi, and Dunst
+3. **Both** - Install configurations for both environments
+
+You can also run the individual installers directly:
+
+```bash
+# Install only Hyprland configuration
+./install-hyprland.sh
+
+# Install only i3 configuration
+./install-i3.sh
+```
+
+The installer will:
+- Check for required dependencies
+- Backup existing configurations
+- Install the Achromatic theme files
+- Verify the installation
 
 ## Key Bindings
 
@@ -211,7 +236,17 @@ achromatic/
 │   │   └── abyss.rasi
 │   └── mako/
 │       └── config
+├── i3/
+│   ├── config/
+│   ├── i3status/
+│   ├── rofi/
+│   └── dunst/
 ├── screenshots/
+│   ├── hyprland/
+│   └── i3/
+├── install.sh           # Master installer with menu
+├── install-hyprland.sh  # Hyprland-specific installer
+├── install-i3.sh        # i3-specific installer
 └── README.md
 ```
 
@@ -287,8 +322,8 @@ cat /tmp/hypr/$(ls -t /tmp/hypr/ | head -n 1)/hyprland.log
 
 ## Roadmap
 
-- [ ] Automated installation script
-- [ ] i3 window manager support
+- [x] Automated installation script
+- [ ] i3 window manager support (structure ready, configs coming soon)
 - [ ] KDE Plasma theme integration
 - [ ] Kitty terminal color scheme
 - [ ] Hyprlock screen locker theme
