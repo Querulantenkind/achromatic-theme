@@ -78,10 +78,11 @@ if [[ -f /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substri
 fi
 
 # === FASTFETCH GREETING ===
-# Run achromatic glitch animation on new interactive shells
-if [[ -o interactive ]] && [[ -x "$HOME/.config/fastfetch/achromatic-glitch.sh" ]]; then
-    "$HOME/.config/fastfetch/achromatic-glitch.sh"
+# Display system info on new interactive shells
+if [[ -o interactive ]] && command -v fastfetch &>/dev/null; then
+    fastfetch
 fi
+# Note: To run the glitch animation manually, use: achromatic-glitch
 
 # === PATH ===
 # Ensure ~/.local/bin is in PATH for achromatic-glitch command
