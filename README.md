@@ -22,6 +22,16 @@ A complete Wayland compositor setup with matching components:
 - **Notifications**: Mako with three urgency levels
 - **Terminal**: Optimized for Kitty (compatible with any terminal)
 
+### i3 (Abyss Theme)
+
+A complete X11 window manager setup with matching components:
+
+- **Window Manager**: i3 with matching keybindings
+- **Status Bar**: i3status with text-only modules
+- **Application Launcher**: Rofi (same theme as Hyprland)
+- **Notifications**: Dunst with three urgency levels
+- **Terminal**: Optimized for Kitty (compatible with any terminal)
+
 ## Screenshots
 
 *Screenshots will be added soon*
@@ -53,12 +63,33 @@ A complete Wayland compositor setup with matching components:
 - **Bold Selection**: Clear indication of focused item
 - **Grayscale States**: Normal, active, urgent differentiation
 
-### Mako Notifications
+### Mako Notifications (Hyprland)
 
 - **Three Urgency Levels**: Low (dimmed), Normal, Critical (persistent)
 - **Smart Timeouts**: Auto-dismiss for normal, manual for critical
 - **Minimal Design**: No icons, clean typography
 - **Overlay Layer**: Always visible when needed
+
+### i3 Configuration
+
+- **Pure Monochrome**: Matching colors with Hyprland setup
+- **VIM-Style Navigation**: h/j/k/l for window focus
+- **i3-gaps Support**: Inner gaps 5px, outer gaps 10px
+- **Smart Workspace Management**: 9 workspaces with scratchpad
+- **Matching Keybindings**: Same shortcuts as Hyprland where possible
+
+### i3status Bar
+
+- **Text-Only Format**: CPU, RAM, Network, Battery, Volume, Clock
+- **Monochrome States**: Good, degraded, bad states in grayscale
+- **Minimal Design**: No icons, clean monospace font
+
+### Dunst Notifications (i3)
+
+- **Three Urgency Levels**: Matching Mako configuration
+- **Smart Timeouts**: Auto-dismiss for normal, manual for critical
+- **Minimal Design**: No icons, monospace typography
+- **Matching Colors**: Same palette as all other components
 
 ## Color Palette
 ```
@@ -78,16 +109,24 @@ A complete Wayland compositor setup with matching components:
 ### Base System
 
 - Arch Linux (or similar rolling release)
-- Hyprland (>= 0.40.0)
-- Wayland session
+- For Hyprland: Hyprland (>= 0.40.0), Wayland session
+- For i3: i3-wm or i3-gaps, X11 session
 
-### Required Packages
+### Required Packages (Hyprland)
 ```bash
 sudo pacman -S hyprland waybar rofi mako kitty \
                polkit-kde-agent networkmanager \
                network-manager-applet pavucontrol \
                wl-clipboard cliphist grim slurp \
                brightnessctl playerctl
+```
+
+### Required Packages (i3)
+```bash
+sudo pacman -S i3-wm i3status rofi dunst kitty \
+               polkit-gnome networkmanager \
+               network-manager-applet pavucontrol \
+               scrot brightnessctl playerctl
 ```
 
 ### Optional Packages
@@ -238,9 +277,14 @@ achromatic/
 │       └── config
 ├── i3/
 │   ├── config/
+│   │   └── config
 │   ├── i3status/
+│   │   └── config
 │   ├── rofi/
+│   │   ├── config.rasi
+│   │   └── abyss.rasi
 │   └── dunst/
+│       └── dunstrc
 ├── screenshots/
 │   ├── hyprland/
 │   └── i3/
@@ -323,7 +367,7 @@ cat /tmp/hypr/$(ls -t /tmp/hypr/ | head -n 1)/hyprland.log
 ## Roadmap
 
 - [x] Automated installation script
-- [ ] i3 window manager support (structure ready, configs coming soon)
+- [x] i3 window manager support
 - [ ] KDE Plasma theme integration
 - [ ] Kitty terminal color scheme
 - [ ] Hyprlock screen locker theme

@@ -71,19 +71,6 @@ echo "║                                                           ║"
 echo "╚═══════════════════════════════════════════════════════════╝"
 echo ""
 
-# === CHECK IF CONFIGURATIONS EXIST ===
-
-print_section "Checking Configuration Files"
-
-# Check if i3 configuration files exist in source
-if [ ! -d "$I3_SOURCE/config" ] || [ -z "$(ls -A "$I3_SOURCE/config" 2>/dev/null)" ]; then
-    print_warning "i3 configuration files not yet available"
-    print_info "The i3 configuration is still under development"
-    print_info "Please check back later or contribute to the project"
-    echo ""
-    exit 0
-fi
-
 # === PRE-INSTALLATION CHECKS ===
 
 print_section "Pre-Installation Checks"
@@ -176,18 +163,18 @@ if [ -f "$I3_SOURCE/i3status/config" ]; then
     cp "$I3_SOURCE/i3status/config" "$I3STATUS_CONFIG/config"
     print_success "Installed: i3status configuration"
 else
-    print_warning "i3status config not found, skipping..."
+    print_error "Source file not found: i3status config"
+    exit 1
 fi
 
 # Copy Rofi configuration
-if [ -f "$I3_SOURCE/rofi/config.rasi" ]; then
+if [ -f "$I3_SOURCE/rofi/config.rasi" ] && [ -f "$I3_SOURCE/rofi/abyss.rasi" ]; then
     cp "$I3_SOURCE/rofi/config.rasi" "$ROFI_CONFIG/config.rasi"
-    if [ -f "$I3_SOURCE/rofi/abyss.rasi" ]; then
-        cp "$I3_SOURCE/rofi/abyss.rasi" "$ROFI_CONFIG/abyss.rasi"
-    fi
+    cp "$I3_SOURCE/rofi/abyss.rasi" "$ROFI_CONFIG/abyss.rasi"
     print_success "Installed: Rofi configuration"
 else
-    print_warning "Rofi config not found, skipping..."
+    print_error "Source files not found: Rofi config.rasi or abyss.rasi"
+    exit 1
 fi
 
 # Copy Dunst configuration
@@ -195,7 +182,8 @@ if [ -f "$I3_SOURCE/dunst/dunstrc" ]; then
     cp "$I3_SOURCE/dunst/dunstrc" "$DUNST_CONFIG/dunstrc"
     print_success "Installed: Dunst configuration"
 else
-    print_warning "Dunst config not found, skipping..."
+    print_error "Source file not found: Dunst config"
+    exit 1
 fi
 
 # === POST-INSTALLATION ===
@@ -230,6 +218,10 @@ verify_file() {
 }
 
 verify_file "$I3_CONFIG/config" "i3 config"
+verify_file "$I3STATUS_CONFIG/config" "i3status config"
+verify_file "$ROFI_CONFIG/config.rasi" "Rofi config"
+verify_file "$ROFI_CONFIG/abyss.rasi" "Rofi theme"
+verify_file "$DUNST_CONFIG/dunstrc" "Dunst config"
 
 if [ $VERIFICATION_FAILED -eq 1 ]; then
     print_error "Verification failed - some files are missing"

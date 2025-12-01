@@ -1,0 +1,112 @@
+# ============================================================================
+# ABYSS I3STATUS CONFIGURATION
+# Pure Monochrome Status Bar
+# ============================================================================
+
+general {
+    output_format = "i3bar"
+    colors = true
+    interval = 2
+    
+    # Monochrome color scheme
+    color_good = "#cccccc"
+    color_degraded = "#666666"
+    color_bad = "#ffffff"
+    
+    markup = "pango"
+}
+
+# ----------------------------------------------------------------------------
+# MODULE ORDER
+# ----------------------------------------------------------------------------
+
+order += "cpu_usage"
+order += "memory"
+order += "wireless _first_"
+order += "ethernet _first_"
+order += "battery all"
+order += "volume master"
+order += "tztime local"
+
+# ----------------------------------------------------------------------------
+# CPU USAGE
+# ----------------------------------------------------------------------------
+
+cpu_usage {
+    format = "CPU %usage"
+    degraded_threshold = 50
+    max_threshold = 90
+    separator = false
+}
+
+# ----------------------------------------------------------------------------
+# MEMORY
+# ----------------------------------------------------------------------------
+
+memory {
+    format = "RAM %percentage_used"
+    threshold_degraded = "20%"
+    threshold_critical = "10%"
+    separator = false
+}
+
+# ----------------------------------------------------------------------------
+# WIRELESS
+# ----------------------------------------------------------------------------
+
+wireless _first_ {
+    format_up = "NET %essid"
+    format_down = ""
+    format_quality = "%d%%"
+    separator = false
+}
+
+# ----------------------------------------------------------------------------
+# ETHERNET
+# ----------------------------------------------------------------------------
+
+ethernet _first_ {
+    format_up = "ETH"
+    format_down = ""
+    separator = false
+}
+
+# ----------------------------------------------------------------------------
+# BATTERY
+# ----------------------------------------------------------------------------
+
+battery all {
+    format = "%status %percentage"
+    format_down = ""
+    status_chr = "CHR"
+    status_bat = "BAT"
+    status_unk = "UNK"
+    status_full = "FULL"
+    low_threshold = 15
+    threshold_type = "percentage"
+    integer_battery_capacity = true
+    separator = false
+}
+
+# ----------------------------------------------------------------------------
+# VOLUME
+# ----------------------------------------------------------------------------
+
+volume master {
+    format = "VOL %volume"
+    format_muted = "MUTE"
+    device = "default"
+    mixer = "Master"
+    mixer_idx = 0
+    separator = false
+}
+
+# ----------------------------------------------------------------------------
+# TIME
+# ----------------------------------------------------------------------------
+
+tztime local {
+    format = "%H:%M"
+    separator = false
+}
+
