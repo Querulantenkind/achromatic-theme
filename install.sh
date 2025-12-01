@@ -76,7 +76,7 @@ echo ""
 print_section "Pre-Installation Checks"
 
 # Check if Hyprland is installed
-if ! command -v Hyprland &> /dev/null; then
+if ! command -v hyprland &> /dev/null; then
     print_warning "Hyprland is not installed"
     print_info "Install with: sudo pacman -S hyprland"
     read -p "Continue anyway? (y/N): " -n 1 -r
