@@ -77,6 +77,16 @@ if [[ -f /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substri
     HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND='fg=#666666'
 fi
 
+# === FASTFETCH GREETING ===
+# Run achromatic glitch animation on new interactive shells
+if [[ -o interactive ]] && [[ -x "$HOME/.config/fastfetch/achromatic-glitch.sh" ]]; then
+    "$HOME/.config/fastfetch/achromatic-glitch.sh"
+fi
+
+# === PATH ===
+# Ensure ~/.local/bin is in PATH for achromatic-glitch command
+[[ ":$PATH:" != *":$HOME/.local/bin:"* ]] && export PATH="$HOME/.local/bin:$PATH"
+
 # Add your custom configurations below this line
 # ============================================================================
 

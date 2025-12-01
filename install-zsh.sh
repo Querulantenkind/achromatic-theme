@@ -96,8 +96,9 @@ TOOL_PACKAGES[fd]="fd"
 TOOL_PACKAGES[bat]="bat"
 TOOL_PACKAGES[rg]="ripgrep"
 TOOL_PACKAGES[yazi]="yazi"
+TOOL_PACKAGES[fastfetch]="fastfetch"
 
-RECOMMENDED_TOOLS=("zoxide" "fzf" "eza" "fd" "bat" "rg" "yazi")
+RECOMMENDED_TOOLS=("zoxide" "fzf" "eza" "fd" "bat" "rg" "yazi" "fastfetch")
 MISSING_TOOLS=()
 MISSING_PACKAGES=()
 
@@ -199,6 +200,59 @@ if [ $FZF_TAB_MISSING -eq 1 ]; then
         print_info "No AUR helper found (yay/paru). Install fzf-tab manually:"
         print_info "  yay -S fzf-tab-git  or  paru -S fzf-tab-git"
     fi
+fi
+
+# === INSTALL FASTFETCH CONFIGURATION ===
+
+print_section "Installing Fastfetch Configuration"
+
+FASTFETCH_SOURCE="$SCRIPT_DIR/fastfetch"
+FASTFETCH_CONFIG="$HOME/.config/fastfetch"
+
+if [[ -d "$FASTFETCH_SOURCE" ]]; then
+    # Backup existing fastfetch config
+    if [[ -d "$FASTFETCH_CONFIG" ]]; then
+        print_info "Backing up existing fastfetch configuration..."
+        cp -r "$FASTFETCH_CONFIG" "$BACKUP_DIR/fastfetch" 2>/dev/null || true
+        print_success "Backed up: fastfetch"
+    fi
+    
+    # Create fastfetch config directory
+    mkdir -p "$FASTFETCH_CONFIG"
+    
+    # Copy fastfetch files
+    if [[ -f "$FASTFETCH_SOURCE/config.jsonc" ]]; then
+        cp "$FASTFETCH_SOURCE/config.jsonc" "$FASTFETCH_CONFIG/"
+        print_success "Installed: fastfetch config.jsonc"
+    fi
+    
+    if [[ -f "$FASTFETCH_SOURCE/logo.txt" ]]; then
+        cp "$FASTFETCH_SOURCE/logo.txt" "$FASTFETCH_CONFIG/"
+        print_success "Installed: fastfetch logo.txt"
+    fi
+    
+    if [[ -f "$FASTFETCH_SOURCE/achromatic-glitch.sh" ]]; then
+        cp "$FASTFETCH_SOURCE/achromatic-glitch.sh" "$FASTFETCH_CONFIG/"
+        chmod +x "$FASTFETCH_CONFIG/achromatic-glitch.sh"
+        print_success "Installed: achromatic-glitch.sh"
+    fi
+    
+    # Create convenience wrapper in ~/.local/bin
+    mkdir -p "$HOME/.local/bin"
+    cat > "$HOME/.local/bin/achromatic-glitch" << 'EOF'
+#!/bin/bash
+# Achromatic glitch animation launcher
+exec "$HOME/.config/fastfetch/achromatic-glitch.sh" "$@"
+EOF
+    chmod +x "$HOME/.local/bin/achromatic-glitch"
+    print_success "Created: ~/.local/bin/achromatic-glitch"
+    
+    # Check if ~/.local/bin is in PATH
+    if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
+        print_info "Note: ~/.local/bin will be added to PATH via .zshrc"
+    fi
+else
+    print_warning "Fastfetch source directory not found, skipping"
 fi
 
 # === BACKUP EXISTING CONFIGURATIONS ===
