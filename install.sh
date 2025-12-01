@@ -66,8 +66,9 @@ show_menu() {
     echo ""
     echo "  1) Install Hyprland configuration (Wayland)"
     echo "  2) Install i3 configuration (X11)"
-    echo "  3) Install both configurations"
-    echo "  4) Exit"
+    echo "  3) Install KDE Plasma 6 theme"
+    echo "  4) Install Hyprland + i3 (tiling WMs)"
+    echo "  5) Exit"
     echo ""
 }
 
@@ -91,7 +92,16 @@ install_i3() {
     fi
 }
 
-install_both() {
+install_plasma() {
+    if [ -f "$SCRIPT_DIR/install-plasma.sh" ]; then
+        bash "$SCRIPT_DIR/install-plasma.sh"
+    else
+        print_error "install-plasma.sh not found"
+        exit 1
+    fi
+}
+
+install_tiling() {
     print_info "Installing both Hyprland and i3 configurations..."
     echo ""
     
@@ -119,7 +129,7 @@ install_both() {
 show_banner
 show_menu
 
-read -p "Enter your choice [1-4]: " choice
+read -p "Enter your choice [1-5]: " choice
 
 case $choice in
     1)
@@ -129,15 +139,18 @@ case $choice in
         install_i3
         ;;
     3)
-        install_both
+        install_plasma
         ;;
     4)
+        install_tiling
+        ;;
+    5)
         print_info "Installation cancelled"
         exit 0
         ;;
     *)
         print_error "Invalid option: $choice"
-        print_info "Please run the script again and select 1-4"
+        print_info "Please run the script again and select 1-5"
         exit 1
         ;;
 esac
